@@ -1,5 +1,5 @@
 import firebase from 'firebase';
-require('firebase/firestore');
+require('firebase/firestore/dist/index.cjs');
 
 var config = {
   apiKey: 'AIzaSyAjGTOHeeIKLa0_dSjTNQh3cxFVgOSw__8',
@@ -12,13 +12,19 @@ var config = {
 
 firebase.initializeApp(config);
 
-export const db = firebase
+export let db = firebase.firestore();
+
+firebase
   .firestore()
   .enablePersistence()
-  .then(() => firebase.firestore())
+  .then(function() {
+    // Initialize Cloud Firestore through firebase
+    db = firebase.firestore();
+  })
   .catch(err => {
     console.log(err.code);
     return firebase.firestore();
   });
+
 export const auth = firebase.auth();
 export const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
