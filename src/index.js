@@ -1,19 +1,28 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
 
 import registerServiceWorker from './registerServiceWorker';
 import RealsiesProvider from './features/realsies/Store';
 import UserProvider from './features/users/Store';
 
+class Providers extends PureComponent {
+  render() {
+    return (
+      <div>
+        <RealsiesProvider>
+          <UserProvider>{this.props.children}</UserProvider>
+        </RealsiesProvider>
+      </div>
+    );
+  }
+}
+
 ReactDOM.render(
   <React.StrictMode>
-    <RealsiesProvider>
-      <UserProvider>
-        <App />
-      </UserProvider>
-    </RealsiesProvider>
+    <Providers>
+      <App />
+    </Providers>
   </React.StrictMode>,
   document.getElementById('root')
 );

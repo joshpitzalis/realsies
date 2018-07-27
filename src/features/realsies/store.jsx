@@ -23,11 +23,15 @@ class RealsiesProvider extends PureComponent {
     realsies: [],
     bobo: 'pickle',
     add: this.add,
-    handleSubmit: this.handleSubmit,
+    handleSubmit: this.handleSubmit
   };
 
   render() {
-    return <Realsies.Provider value={this.state}>{this.props.children}</Realsies.Provider>;
+    return (
+      <Realsies.Provider value={this.state}>
+        {this.props.children}
+      </Realsies.Provider>
+    );
   }
 }
 

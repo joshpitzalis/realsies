@@ -12,7 +12,8 @@ class UserProvider extends PureComponent {
     }
   }
 
-  handleSignIn = () => auth.signInWithPopup(googleAuthProvider).catch(error => console.log(error));
+  handleSignIn = () =>
+    auth.signInWithPopup(googleAuthProvider).catch(error => console.log(error));
 
   handleSignout = () => {
     auth.signOut().catch(error => console.log(error));
@@ -21,11 +22,13 @@ class UserProvider extends PureComponent {
   state = {
     user: [],
     handleSignIn: this.handleSignIn,
-    handleSignout: this.handleSignout,
+    handleSignout: this.handleSignout
   };
 
   render() {
-    return <User.Provider value={this.state}>{this.props.children}</User.Provider>;
+    return (
+      <User.Provider value={this.state}>{this.props.children}</User.Provider>
+    );
   }
 }
 

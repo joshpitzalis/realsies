@@ -1,12 +1,16 @@
 import React, { PureComponent, Fragment } from 'react';
 import 'antd/dist/antd.css';
 import logo from './logo.svg';
-import './App.css';
 import { DatePicker } from 'antd';
 import { TextInputField, Button, Heading, ListItem } from 'evergreen-ui';
 import PropTypes from 'prop-types';
-import { Realsies } from './features/realsies/Store';
-import { User } from './features/users/Store';
+import styled from 'styled-components';
+import { withContext } from './features/hocs';
+
+const Title = styled.h1`
+  color: black;
+  text-align: center;
+`;
 
 class App extends PureComponent {
   constructor(props) {
@@ -34,7 +38,7 @@ class App extends PureComponent {
         <main className="mw6 center">
           <header className="App-header">
             <img src={logo} className="App-logo" alt="logo" />
-            <Heading>Realsies</Heading>
+            <Title>Realsies</Title>
           </header>
 
           {this.props.user.user ? (
@@ -106,12 +110,4 @@ class App extends PureComponent {
   }
 }
 
-export default props => (
-  <Realsies.Consumer>
-    {store => (
-      <User.Consumer>
-        {userStore => <App realsies={store} user={userStore} />}
-      </User.Consumer>
-    )}
-  </Realsies.Consumer>
-);
+export default withContext(App);
