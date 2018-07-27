@@ -1,34 +1,33 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { auth } from '../../constants/firebase';
+import { setRealsie, getRealsies, addRealsie } from './helpers';
 
 export let Realsies = React.createContext();
 
 class RealsiesProvider extends PureComponent {
-  static Consumer = Realsies.Consumer;
-  add = e => {
-    e.preventDefault();
-    console.log('this');
-    return this.setState({
-      realsies: [
-        {
-          id: 1532350333942,
-          to: 'f@q',
-          thing: 'test thingy',
-          when: '2018-07-31'
-        },
-        ...this.state.realsies
-      ]
-    });
+  componentDidMount() {
+    getRealsies().then(realsies => this.setState({ realsies }));
+  }
+
+  handleSubmit = (to, thing, when) => {
+    let id = +new Date();
+    let payload = { id, to, thing, when };
+    this.setState(setRealsie(payload, false));
+    try {
+      addRealsie(payload);
+    } catch (error) {
+      this.setState(setRealsie(payload, true));
+    }
   };
 
   state = {
-    realsies: [{ a: true }],
-    add: this.add
+    realsies: [],
+    bobo: 'pickle',
+    add: this.add,
+    handleSubmit: this.handleSubmit,
   };
 
   render() {
-    return <Realsies.Provider value={this.state} />;
+    return <Realsies.Provider value={this.state}>{this.props.children}</Realsies.Provider>;
   }
 }
 

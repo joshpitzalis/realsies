@@ -3,18 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "add": "^2.0.6",
     "antd": "^3.7.0",
     "evergreen-ui": "^3.2.4",
     "firebase": "^5.2.0",
     "jest-dom": "^1.10.0",
     "prop-types": "^15.6.2",
     "react": "^16.4.1",
-    "react-automata": "^3.0.0",
     "react-dom": "^16.4.1",
     "react-scripts": "1.1.4",
-    "unstated": "^2.1.1",
-    "xstate": "^3.3.3",
     "yarn": "^1.7.0"
   },
   "scripts": {
@@ -30,7 +26,6 @@
     "eslint-plugin-import": "^2.13.0",
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-react": "^7.10.0",
-    "flow-bin": "^0.77.0",
     "react-testing-library": "^4.1.3"
   }
 }

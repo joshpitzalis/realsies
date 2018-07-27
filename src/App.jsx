@@ -5,44 +5,20 @@ import './App.css';
 import { DatePicker } from 'antd';
 import { TextInputField, Button, Heading, ListItem } from 'evergreen-ui';
 import PropTypes from 'prop-types';
-// import { User } from './stores/Users';
-// import RealsiesProvider from './stores/Realsies';
-import { db } from './constants/firebase';
-
-import { auth, googleAuthProvider } from './constants/firebase';
-import {
-  addRealsie,
-  setRealsie,
-  getRealsies
-} from './features/realsies/actions';
+import { Realsies } from './features/realsies/Store';
+import { User } from './features/users/Store';
 
 class App extends PureComponent {
-  state = {
-    user: false,
-    realsies: [],
-    to: '',
-    thing: '',
-    when: '',
-    onTextChange: this.onTextChange,
-    onDateChange: this.onDateChange,
-    handleSubmit: this.handleSubmit
-  };
-
-  componentDidMount() {
-    try {
-      auth.onAuthStateChanged(user => this.setState({ user }));
-    } catch (err) {
-      console.log('err', err);
-    }
-    getRealsies().then(realsies => this.setState({ realsies }));
+  constructor(props) {
+    super(props);
+    this.state = {
+      to: '',
+      thing: '',
+      when: ''
+    };
+    this.onTextChange = this.onTextChange.bind(this);
+    this.onDateChange = this.onDateChange.bind(this);
   }
-
-  handleSignIn = () =>
-    auth.signInWithPopup(googleAuthProvider).catch(error => console.log(error));
-
-  handleSignout = () => {
-    auth.signOut().catch(error => console.log(error));
-  };
 
   onTextChange = (field, value) => {
     this.setState({ [field]: value });
@@ -50,17 +26,6 @@ class App extends PureComponent {
 
   onDateChange = (date, dateString) => {
     this.setState({ when: dateString });
-  };
-
-  handleSubmit = (to, thing, when) => {
-    let id = +new Date();
-    let payload = { id, to, thing, when };
-    this.setState(setRealsie(payload, false));
-    // try {
-    addRealsie(payload);
-    // } catch (error) {
-    //   this.setState(setRealsie(payload, true));
-    // }
   };
 
   render() {
@@ -71,15 +36,16 @@ class App extends PureComponent {
             <img src={logo} className="App-logo" alt="logo" />
             <Heading>Realsies</Heading>
           </header>
-          {this.state.user ? (
+
+          {this.props.user.user ? (
             <Fragment>
-              <Button onClick={this.handleSignout} appearance="red">
+              <Button onClick={this.props.user.handleSignout} appearance="red">
                 Logout
               </Button>
               <form
                 onSubmit={e => {
                   e.preventDefault();
-                  this.handleSubmit(
+                  this.props.realsies.handleSubmit(
                     this.state.to,
                     this.state.thing,
                     this.state.when
@@ -112,8 +78,8 @@ class App extends PureComponent {
               </form>
 
               <Fragment>
-                {this.state.realsies &&
-                  this.state.realsies.map(item => (
+                {this.props.realsies.realsies &&
+                  this.props.realsies.realsies.map(item => (
                     <ul key={item.id}>
                       <ListItem>
                         <div>{item.thing}</div>
@@ -129,7 +95,7 @@ class App extends PureComponent {
             <Button
               data-testid="login"
               type="primary"
-              onClick={this.handleSignIn}
+              onClick={this.props.user.handleSignIn}
             >
               Signup/Login
             </Button>
@@ -140,8 +106,12 @@ class App extends PureComponent {
   }
 }
 
-App.propTypes = {
-  user: PropTypes.bool.isRequired
-};
-
-export default App;
+export default props => (
+  <Realsies.Consumer>
+    {store => (
+      <User.Consumer>
+        {userStore => <App realsies={store} user={userStore} />}
+      </User.Consumer>
+    )}
+  </Realsies.Consumer>
+);
